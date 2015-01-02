@@ -57,7 +57,8 @@ html, body, #map-container {
 }
 body {
     font-family: 'Source Sans Pro', sans-serif;
-    padding-top: 50px;
+    /*padding-top: 50px;*/
+    padding-top: 60px;
 }
 body .form-control {
     -webkit-appearance: none;
