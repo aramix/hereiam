@@ -1,0 +1,12 @@
+<template name="layout">
+  <div id="wrapper" class="main-wrapper">
+    {{> header}}
+    <div class="container main-container home-container">
+      <div class="row">
+        {{> yield}}
+        <!--{{> login}}-->
+      </div>
+    </div>
+    {{> footer}}
+  </div>
+</template>
