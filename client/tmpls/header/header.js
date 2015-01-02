@@ -1,9 +1,14 @@
-//if (Meteor.isClient) {
-//    Template.header.events = {
-//        "click .open-modal" : function(e,t) {
-//            e.preventDefault();
-//            $("#loginModal").modal("show");
-//
-//        }
-//    };
-//}
+Template.header.events({
+    'click #auth': function(evt, tmpl) {
+        $("#loginModal").modal('show');
+    },
+    'click #logout': function(evt, tmpl) {
+        Meteor.logout();
+    }
+});
+
+Template.header.helpers({
+    userProfile: function() {
+        return Session.get("user").profile;
+    }
+});

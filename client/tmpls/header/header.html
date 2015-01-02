@@ -16,9 +16,22 @@
                     <!-- <li><a href="{{pathFor 'about'}}">ABOUT</a></li> -->
                     <li><a href="{{pathFor 'contact'}}">CONTACT</a>
                     </li>
-                    <ul class="nav navbar-nav navbar-right">
+                    <!-- <ul class="nav navbar-nav navbar-right">
                         {{> loginButtons}}
-                    </ul>
+                    </ul> -->
+                    {{#if currentUser}}
+                    <li>
+                        <a href="#" id="profile">Hi, {{userProfile.name}}</a>
+                    </li>
+                    <li>
+                        <button id="logout" class="btn">Logout</button>
+                        <!-- <button id="logout" class="btn btn-raised">Logout</button> -->
+                    </li>
+                    {{else}}
+                    <li>
+                        <button id="auth" class="btn btn-raised">Sign in/up</button>
+                    </li>
+                    {{/if}}
                 </ul>
 
             </div>

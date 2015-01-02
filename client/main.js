@@ -7,7 +7,13 @@ Router.configure({
 Router.map(function(post) {
     this.route('home', {
         path: '/',
-        layoutTemplate: 'maplayout'
+        layoutTemplate: 'maplayout',
+        // waitOn: function() {
+        //     return Meteor.user(); // && Meteor.subscribe('beats');
+        // },
+        data: function() {
+            return Session.set('user', Meteor.user()); // && Meteor.subscribe('beats');
+        }
     })
 });
 
@@ -17,6 +23,10 @@ Router.map(function(post) {
 
 Router.map(function(post) {
     this.route('contact')
+});
+
+Router.map(function(post) {
+    this.route('help')
 });
 
 var requireLogin = function() {
