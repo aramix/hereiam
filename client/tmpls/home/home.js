@@ -200,7 +200,7 @@ Template.home.helpers({
                 }
 
                 // the smooth zoom function
-                function smoothZoom(map, max, cnt) {
+                window.smoothZoom(map, max, cnt) {
                     if (cnt >= max) {
                         return;
                     } else {
