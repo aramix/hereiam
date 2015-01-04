@@ -10,7 +10,7 @@
                 <a class="navbar-brand" href="{{pathFor 'home'}}">LOGO</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav">
                     <li><a href="{{pathFor 'home'}}">HOME</a>
                     </li>
                     <!-- <li><a href="{{pathFor 'about'}}">ABOUT</a></li> -->
@@ -19,6 +19,13 @@
                     <!-- <ul class="nav navbar-nav navbar-right">
                         {{> loginButtons}}
                     </ul> -->
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <form id="search-form" action="action" class="navbar-form navbar-left">
+                        <div class="form-control-wrapper">
+                            <input type="text" id="search-box" class="form-control col-lg-8 empty floating-label" placeholder="Search">
+                        </div>
+                    </form>
                     {{#if currentUser}}
                     <li>
                         <a href="#" id="profile">Hi, {{userProfile.name}}</a>

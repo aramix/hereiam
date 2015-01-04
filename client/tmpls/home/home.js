@@ -5,7 +5,7 @@ Template.home.helpers({
             // We can use the `ready` callback to interact with the map API once the map is ready.
             GoogleMaps.ready('myMap', function(map) {
                 // Add a marker to the map once it's ready
-                var marker = new google.maps.Marker({
+                window.marker = new google.maps.Marker({
                     position: map.options.center,
                     map: map.instance
                 });
@@ -153,21 +153,27 @@ Template.home.helpers({
                         "weight": 0.5
                     }]
                 }];
+                window.infowindow;
 
-                // Try HTML5 geolocation
+                function toolbox_content(code) {
+                        return '<form action="action" id="marker-baloon" class="form" style="overflow:hidden;"><div class="form-group"><label for="generated-code">Click and copy your code</label><input type="text" id="generated-code" class="form-control input-lg" onClick="this.setSelectionRange(0, this.value.length);" value="' + code + '" readonly></div><div class="form-group"><input type="text" class="form-control floating-label" placeholder="leave a message (optional)"></div></form>';
+                    }
+                    // Try HTML5 geolocation
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function(position) {
                         var pos = new google.maps.LatLng(position.coords.latitude,
                             position.coords.longitude);
 
-                        var infowindow = new google.maps.InfoWindow({
+                        infowindow = new google.maps.InfoWindow({
                             map: map,
-                            position: pos,
-                            content: 'Location found using HTML5.'
+                            position: pos
                         });
-
                         map.setCenter(pos);
                         smoothZoom(map, 18, map.getZoom());
+
+                        Meteor.call('generateCode', infowindow.getPosition(), function(err, code) {
+                            infowindow.setContent(toolbox_content(code));
+                        });
                     }, function() {
                         handleNoGeolocation(true);
                     });
@@ -189,7 +195,7 @@ Template.home.helpers({
                         content: content
                     };
 
-                    var infowindow = new google.maps.InfoWindow(options);
+                    infowindow = new google.maps.InfoWindow(options);
                     map.setCenter(options.position);
                 }
 
@@ -206,6 +212,46 @@ Template.home.helpers({
                             map.setZoom(cnt)
                         }, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
                     }
+                    $.material.init();
+                }
+
+                function placeMarker(position) {
+                    Meteor.call('generateCode', position, function(err, code) {
+                        if (err) {
+                            console.log(err.getStack());
+                        } else {
+                            if (marker) {
+                                // marker.setPosition(position);
+                                infowindow = new google.maps.InfoWindow({
+                                    map: map,
+                                    position: position,
+                                    content: toolbox_content(code)
+                                });
+                            } else {
+                                // marker = new google.maps.Marker({
+                                //     position: position,
+                                //     map: map
+                                // });
+                            }
+                        }
+                        // Apply material styles
+                        $.material.init();
+                    });
+                }
+
+                // Sets the map on all markers in the array.
+                function setAllMap(map) {
+                    marker.setMap(map);
+                }
+
+                // Removes the markers from the map, but keeps them in the array.
+                function clearMarkers() {
+                    setAllMap(null);
+                }
+
+                // Removes the markers from the map, but keeps them in the array.
+                function clearInfoWindows() {
+                    infowindow.setMap(null);
                 }
 
                 var styledMapOptions = {
@@ -217,7 +263,21 @@ Template.home.helpers({
 
                 map.mapTypes.set('usroadatlas', usRoadMapType);
                 map.setMapTypeId('usroadatlas');
+
+                google.maps.event.addListener(map, 'click', function(event) {
+                    // clearMarkers();
+                    clearInfoWindows();
+                    placeMarker(event.latLng);
+                });
+
+                $('#marker-baloon').delegate('submit', function(e) {
+                    e.preventDefault();
+                    alert('asdasd');
+                });
             });
+
+            // // Apply material styles
+            // $.material.init();
 
             // Map initialization options
             return {
@@ -226,3 +286,10 @@ Template.home.helpers({
         }
     }
 });
+
+// Template.home.events({
+//     'submit #marker-baloon': function(evt, tmpl) {
+//         evt.preventDefault();
+//         alert('asdasd');
+//     }
+// });

@@ -46,4 +46,7 @@ var requireLogin = function() {
 
 Meteor.startup(function() {
     GoogleMaps.load();
+    // $(function() {
+    //     $.material.init();
+    // });
 });
